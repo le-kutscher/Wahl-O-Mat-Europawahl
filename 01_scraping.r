@@ -1,4 +1,5 @@
 # Tesseract ---------------------------------------------------------------
+library(tabulizer)
 library(magick)
 library(tesseract)
 library(tidyverse)
@@ -6,7 +7,9 @@ library(tidyverse)
 url <- "https://www.wahl-o-mat.de/europawahl2019/Positionsvergleich-Europawahl2019.pdf"
 download.file(url, "positions.pdf", mode = "wb")
 tesseract_download("eng", getwd()) 
-image_read_pdf("positions.pdf", 1:10, 600) %>% 
+
+"positions.pdf" %>% 
+  image_read_pdf(pages = 1:10, density = 600) %>% 
   image_crop(geometry = "1140x5880+3540+630") %>% 
   image_append(stack = F) %>% 
   image_write("positions.png", format = "png")
@@ -39,4 +42,22 @@ positions <- positions %>%
   as_tibble %>% 
   set_names(parteien)
 
+# Thesen ------------------------------------------------------------------
+extract_text("positions.pdf", pages = 1, encoding = "UTF-8") %>% 
+  str_split("\\r\\n[0-9]+\\. ") %>% 
+  unlist %>% 
+  str_replace_all("(1.|\\r\\nWahl-O-Mat® Europawahl 2019\\r\\nVergleich der Positionen\\r\\n1/12\\r\\n|\\r\\n)", " ") %>% 
+  str_squish
+
+positions <- positions %>% 
+  mutate(thesen = extract_text("positions.pdf", pages = 1, encoding = "UTF-8") %>% 
+           str_split("\\r\\n[0-9]+\\. ") %>% 
+           unlist %>% 
+           str_replace_all("(1.|
+                           \\r\\nWahl-O-Mat® Europawahl 2019\\r\\nVergleich der Positionen\\r\\n1/12\\r\\n|
+                           \\r\\n)", 
+                           " ") %>% 
+           str_squish)
+
 write_rds(positions, "positions.rds")
+
