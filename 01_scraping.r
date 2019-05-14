@@ -1,4 +1,5 @@
 # Tesseract ---------------------------------------------------------------
+library(tabulizer)
 library(magick)
 library(tesseract)
 library(tidyverse)
@@ -41,4 +42,22 @@ positions <- positions %>%
   as_tibble %>% 
   set_names(parteien)
 
+# Thesen ------------------------------------------------------------------
+extract_text("positions.pdf", pages = 1, encoding = "UTF-8") %>% 
+  str_split("\\r\\n[0-9]+\\. ") %>% 
+  unlist %>% 
+  str_replace_all("(1.|\\r\\nWahl-O-Mat® Europawahl 2019\\r\\nVergleich der Positionen\\r\\n1/12\\r\\n|\\r\\n)", " ") %>% 
+  str_squish
+
+positions <- positions %>% 
+  mutate(thesen = extract_text("positions.pdf", pages = 1, encoding = "UTF-8") %>% 
+           str_split("\\r\\n[0-9]+\\. ") %>% 
+           unlist %>% 
+           str_replace_all("(1.|
+                           \\r\\nWahl-O-Mat® Europawahl 2019\\r\\nVergleich der Positionen\\r\\n1/12\\r\\n|
+                           \\r\\n)", 
+                           " ") %>% 
+           str_squish)
+
 write_rds(positions, "positions.rds")
+
