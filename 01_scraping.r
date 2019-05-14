@@ -6,7 +6,9 @@ library(tidyverse)
 url <- "https://www.wahl-o-mat.de/europawahl2019/Positionsvergleich-Europawahl2019.pdf"
 download.file(url, "positions.pdf", mode = "wb")
 tesseract_download("eng", getwd()) 
-image_read_pdf("positions.pdf", 1:10, 600) %>% 
+
+"positions.pdf" %>% 
+  image_read_pdf(pages = 1:10, density = 600) %>% 
   image_crop(geometry = "1140x5880+3540+630") %>% 
   image_append(stack = F) %>% 
   image_write("positions.png", format = "png")
