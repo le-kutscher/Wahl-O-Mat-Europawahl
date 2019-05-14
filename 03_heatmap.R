@@ -61,8 +61,22 @@ d3.BT <- d3heatmap(df.BT,
                 xaxis_height = 100,
                 yaxis_width = 250,
                 cellnote = df.text.BT,
-                k_col = 4)
+                k_col = 2)
 saveWidget(d3.BT, "d3heatmap-BT-Parteien.html")
+
+similarity <- function(df){
+  diff <- matrix(nrow = ncol(df), ncol = ncol(df)) %>% as_tibble()
+  names(diff) <- names(df)
+  diff$party <- names(df)
+  for(party in 1:ncol(df)){
+    for (i in 1:ncol(df)) {
+      diff[party,i] <- sum(df[,party] == df[,i])
+    }
+  }
+  print(diff[,c(ncol(df)+1, 1:ncol(df))])
+} #create function for creating matrix that shows how many common positions every party has with one another
+similarity(df)
+similarity(df.BT)
 
 # heatmaply ---------------------------------------------------------------
 

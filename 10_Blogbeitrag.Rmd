@@ -1,0 +1,106 @@
+---
+title: "Wahl-O-Mat Analyse - Wo sich CDU und SPD unterscheiden, wie verwandt AfD und NPD sind und wie man eine Lobby-Partei erkennt"
+author: "Samuel Brielmaier"
+date: "14 5 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+library(heatmaply)
+library(tidyverse)
+library(d3heatmap)
+library(gplots)
+library(htmlwidgets)
+#heatmapper not available for R version 3.6
+
+Sys.getlocale()
+Sys.setlocale("LC_CTYPE", "german")
+
+
+# 1. Data Preparation -----------------------------------------------------
+
+df <- read_csv2("./data/Datensatz_Wahl-O-Mat_Europawahl-2019.csv")
+
+Thesen <- read_csv2("./data/Data_pp1-3_haendisch.csv") %>% 
+  pull(These) %>% 
+  str_remove_all("[0-9]+\\. ") 
+
+Label <- df$Label
+df <- df[,-1]
+rownames(df) <- Label %>% 
+  str_remove_all("[0-9]+\\. ") 
+
+colors <- c("#e21a00", "grey", "chartreuse3")
+
+df.text <- df
+df.text[df.text==1] <- 'Ablehnung zu "'
+df.text[df.text==2] <- 'Neutral zu "'
+df.text[df.text==3] <- 'Zustimmung zu "'
+
+df.text <- df.text %>% 
+  map_dfc(~str_c(., Thesen, '"'))
+
+```
+Der Wahl-O-Mat fragt alle zur Europawahl antretenden Parteien zu ihrer Haltung gegenüber 38 Thesen ab. Normalerweise benutzt man den Wahl-O-Mat, um zu schauen, mit welcher Partei man selbst inhaltlich am meisten Überschneidungen hat. Was aber, wenn man sich die Position der Partein im Vergleich anschaut? Welche Parteien haben viel gemeinsam, welche wenig? Stimmt es, dass sich SPD und Union so stark ähneln, wie <a href="https://www.spiegel.de/politik/ausland/europawahl-waehler-von-union-und-spd-sehen-laut-umfrage-kaum-unterschiede-a-1267328.html">viele glauben</a>?
+Inspiriert von einem ähnlichen  <a href="http://www.dkriesel.com/blog/2017/0904_wahl-o-mat-auswertung_teil_2_thesen-_und_parteienverwandtschaften">Blogpost zur Bundestagswahl 2017</a> von David Kriesel habe ich die Daten analysiert und grafisch aufbereitet. 
+Die Grafiken sehen auf den ersten Blick etwas kompliziert aus, im Grunde bestehen sie aber nur aus einer farbige Tabelle und einer Art Verwandschaftsbaum, ich erkläre das jeweils schrittweise. Zuerst schauen wir nur auf die Parteien, die aktuell im Bundestag vertreten sind, bevor wir alle kandidierenden Parteien betrachten. Die Grafiken sind interaktiv, d.h. durch klicken oder tippen erhaltet ihr noch etwas mehr Informationen. Ihr könnt auch eine einzelne Partei oder These hervorheben (durch einfaches klicken auf die )
+
+
+## SPD und Grüne stimmen in 33 von 38 Thesen überein
+Die folgende Grafik besteht eigentlich aus zwei Grafiken. Wir schauen uns erstmal nur die Heatmap, das sind die farbigen Kästchen in der Mitte an. Sie symbolisieren die Haltung jeder Partei (Spalten, Beschriftung unten) zu den 38 Thesen des Wahl-O-Mats (Zeilen, Beschriftung rechts). Wenn es unübersichtlich ist oder ihr die komplette These sehen wollt, klickt einfach auf das Kästchen. Rot bedeutet Ablehnung, grün Zustimmung und grau eine neutrale Haltung. So weit, so klar. Wenn wir uns beispielsweise die oberste These "Bio-Landwirtschaft fördern" anschauen, sehen wir, dass die Grünen, SPD und die Linke dem Zustimmen, die CDU/CSU sich neutral verhält und sowohl FDP als auch AfD Bio-Landwirtschaft nicht fördern wollen. 
+
+Mit 33 von 38 
+
+die inhaltslosen Wahlkampf-Plakate 
+
+
+
+## "Die beiden Volkspartein unterscheiden sich nicht" - oder doch?
+Die Klage, dass sich SPD und Union nicht mehr wirklich unterscheiden, hört man mittlerweile nicht mehr nur bei enttäuschten Sozialdemokraten. Aber sind die beiden Volksparteien in ihren Positionen wirklich so eng beieinander wie die inhaltsleeren Wahlkampf-Plakate vermuten lassen? 
+Ein Blick auf die Heatmap zeigt: 
+Nur in 16 Thesen stimmen die beiden Volksparteien (oder besser ehemalige Volksparteien) in ihrer Position überein. Bei den meisten Thesen (22 an der Zahl), unterscheiden sich ihre Meinungen. 
+
+
+
+```{r BT.Parteien, echo=FALSE, warning=FALSE}
+df.BT <- subset(df, select = 1:6)
+df.text.BT <- subset(df.text, select = 1:6)
+rownames(df.BT) <- rownames(df)
+
+d3heatmap(df.BT, 
+                colors = colors, 
+                revC = TRUE,
+                dendrogram = "both", 
+                width = 1000,
+                height = 600,
+                xaxis_height = 100,
+                yaxis_width = 250,
+                cellnote = df.text.BT,
+                k_col = 2)
+```
+
+
+
+## Woran man eine Lobby-Partei erkennt
+bliblablubb
+```{r Alle.Parteien, echo=FALSE, warning=FALSE}
+d3heatmap(df, 
+          colors = colors, 
+          revC = TRUE,
+          dendrogram = "both", 
+          width = 1000,
+          height = 600,
+          xaxis_height = 100,
+          yaxis_width = 250,
+          cellnote = df.text,
+          k_col = 4)
+```
+
+## Viele Linke Parteien, einige Nationalisten, wenig Konservative und Liberale Parteien
+
+
+Wer sich schon einmal überlegt hat, die Tierschutzpartei oder die Partei "Volksabstimmung" zu wählen, hat womöglich nicht damit gerechnet, dass diese die größten Übereinstimmungen mit der NPD und der AfD haben. 
+
+## Merci
+
+Danke an Steffen für seinen Support beim scrapen der PDF! Leider stellt die Bundeszentrale für politische Bildung die Daten des Wahl-O-Mats auch auf Nachfrage nicht zur Verfügung (und versteckt die Position der Parteien in der PDF als Hintergrundgrafik), weshalb man sie aufwändig mit einem Zeichenerkennungsverfahren auslesen muss. Die Positionen der Parteien im Bundestag hab ich nochmal händisch überprüft, trotzdem kann ich leider keine Verantwortung für die Richtigkeit der Daten übernehmen. Wenn jemand die Daten weiter verwenden möchte (die BpB freut sich sicher), ihr findet sie auf github. Danke an Jan für die Unterstützung bei der Einbidung der Grafiken auf die Website!
