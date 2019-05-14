@@ -2,11 +2,14 @@ library(heatmaply)
 library(tidyverse)
 library(d3heatmap)
 library(gplots)
+library(htmlwidgets)
 #heatmapper not available for R version 3.6
 
 Sys.getlocale()
 Sys.setlocale("LC_CTYPE", "german")
 
+
+# 1. Data Preparation -----------------------------------------------------
 
 df <- read_csv2("./data/Datensatz_Wahl-O-Mat_Europawahl-2019.csv")
 
@@ -26,12 +29,43 @@ df.text[df.text==1] <- 'Ablehnung zu "'
 df.text[df.text==2] <- 'Neutral zu "'
 df.text[df.text==3] <- 'Zustimmung zu "'
 
-
 df.text <- df.text %>% 
   map_dfc(~str_c(., Thesen, '"'))
 
-#df.text[] <- lapply( df.text, factor, ordered = TRUE) # the "[]" keeps the dataframe structure
-lapply(df.text, class)
+
+# 2. d3heatmapper ---------------------------------------------------------
+
+d3 <- d3heatmap(df, 
+          colors = colors, 
+          revC = TRUE,
+          dendrogram = "both", 
+          width = 1000,
+          height = 600,
+          xaxis_height = 100,
+          yaxis_width = 250,
+          cellnote = df.text,
+          k_col = 4)
+saveWidget(d3, "d3heatmap-alle-Parteien.html")
+
+#Bundestagsparteien
+df.BT <- subset(df, select = 1:6)
+df.text.BT <- subset(df.text, select = 1:6)
+rownames(df.BT) <- rownames(df)
+
+d3.BT <- d3heatmap(df.BT, 
+                colors = colors, 
+                revC = TRUE,
+                dendrogram = "both", 
+                width = 1000,
+                height = 600,
+                xaxis_height = 100,
+                yaxis_width = 250,
+                cellnote = df.text.BT,
+                k_col = 4)
+saveWidget(d3.BT, "d3heatmap-BT-Parteien.html")
+
+# heatmaply ---------------------------------------------------------------
+
 
 #v1: simple
 heatmaply(df,
@@ -65,7 +99,6 @@ heatmaply(df,
           labCol = names(df),
           label_names = c("<b>These</b> (N° und Abkürzung)", "<b>Partei</b> ", "<b>Position</b>"))
 
-# 2. heatmap for bundestag partys -----------------------------------------------------------
 
 df.EP <- subset(df, select = 1:6)
 rownames(df.EP) <- rownames(df)
@@ -91,16 +124,4 @@ heatmaply(df.EP,
           label_names = c("<b>These</b> (N° und Abkürzung)", "<b>Partei</b> ", "<b>Position</b>"))
 
 
-# 3. d3heatmapper ---------------------------------------------------------
-
-d3heatmap(df, 
-          colors = colors, 
-          revC = TRUE,
-          dendrogram = "both", 
-          width = 1000,
-          height = 600,
-          xaxis_height = 100,
-          yaxis_width = 250,
-          cellnote = df.text,
-          k_col = 4)
 
