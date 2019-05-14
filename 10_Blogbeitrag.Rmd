@@ -46,20 +46,8 @@ Inspiriert von einem ähnlichen  <a href="http://www.dkriesel.com/blog/2017/0904
 Die Grafiken sehen auf den ersten Blick etwas kompliziert aus, im Grunde bestehen sie aber nur aus einer farbige Tabelle und einer Art Verwandschaftsbaum, ich erkläre das jeweils schrittweise. Zuerst schauen wir nur auf die Parteien, die aktuell im Bundestag vertreten sind, bevor wir alle kandidierenden Parteien betrachten. Die Grafiken sind interaktiv, d.h. durch klicken oder tippen erhaltet ihr noch etwas mehr Informationen. Ihr könnt auch eine einzelne Partei oder These hervorheben (durch einfaches klicken auf die )
 
 
-## SPD und Grüne stimmen in 33 von 38 Thesen überein
-Die folgende Grafik besteht eigentlich aus zwei Grafiken. Wir schauen uns erstmal nur die Heatmap, das sind die farbigen Kästchen in der Mitte an. Sie symbolisieren die Haltung jeder Partei (Spalten, Beschriftung unten) zu den 38 Thesen des Wahl-O-Mats (Zeilen, Beschriftung rechts). Wenn es unübersichtlich ist oder ihr die komplette These sehen wollt, klickt einfach auf das Kästchen. Rot bedeutet Ablehnung, grün Zustimmung und grau eine neutrale Haltung. So weit, so klar. Wenn wir uns beispielsweise die oberste These "Bio-Landwirtschaft fördern" anschauen, sehen wir, dass die Grünen, SPD und die Linke dem Zustimmen, die CDU/CSU sich neutral verhält und sowohl FDP als auch AfD Bio-Landwirtschaft nicht fördern wollen. 
-
-Mit 33 von 38 
-
-die inhaltslosen Wahlkampf-Plakate 
-
-
-
-## "Die beiden Volkspartein unterscheiden sich nicht" - oder doch?
-Die Klage, dass sich SPD und Union nicht mehr wirklich unterscheiden, hört man mittlerweile nicht mehr nur bei enttäuschten Sozialdemokraten. Aber sind die beiden Volksparteien in ihren Positionen wirklich so eng beieinander wie die inhaltsleeren Wahlkampf-Plakate vermuten lassen? 
-Ein Blick auf die Heatmap zeigt: 
-Nur in 16 Thesen stimmen die beiden Volksparteien (oder besser ehemalige Volksparteien) in ihrer Position überein. Bei den meisten Thesen (22 an der Zahl), unterscheiden sich ihre Meinungen. 
-
+## Wahlprogramme auf Farben verkürzen
+Die folgende Grafik besteht eigentlich aus zwei Grafiken. Wir schauen uns erstmal nur die Heatmap, das sind die farbigen Kästchen in der Mitte, an. Sie symbolisieren die Haltung jeder Partei (Spalten, Beschriftung unten) zu den 38 Thesen des Wahl-O-Mats (Zeilen, Beschriftung rechts). Wenn es unübersichtlich ist oder ihr die komplette These sehen wollt, klickt einfach auf das Kästchen. Rot bedeutet Ablehnung, grün Zustimmung und grau eine neutrale Haltung. Wenn wir uns beispielsweise die oberste These "Bio-Landwirtschaft fördern" anschauen, sehen wir, dass die Grünen, SPD und die Linke dem Zustimmen, die CDU/CSU sich neutral verhält und sowohl FDP als auch AfD Bio-Landwirtschaft nicht fördern wollen. So weit ist das Ganze nur eine extrem verkürzte Form von Wahlprogrammen, möglicherweise zu stark verkürzt, aber die Erklärungen der Parteien zu den einzelnen Thesen konnte ich leider nicht auslesen (sind aber unter wahl-o-mat.de nachzulesen). 
 
 
 ```{r BT.Parteien, echo=FALSE, warning=FALSE}
@@ -80,9 +68,20 @@ d3heatmap(df.BT,
 ```
 
 
+## SPD und Grüne stimmen in 33 von 38 Thesen überein
+Wir können aus der Grafik noch mehr ableiten, z.B. wie stark sich einzelne Parteien unterscheiden. Zum einen sieht man in der Heatmap einen Bereich links oben, in dem fast alle Kästchen grün sind. Ein Blick auf die Parteien in diesen Spalten zeigt: Linke, SPD und Grüne haben offensichtlich große inhaltliche Schnittmengen. Das sollte uns nicht überraschen, es ist aber grundsätzlich auch gut, 
+ Wenn wir uns die Thesen anschauen, sehen wir auch direkt, dass es sich um "klassisch linke" Themen handelt (Frauenquote, Mindestlohn, ...). Wenn wir bspw. die Grünen und die SPD vergleichen, sehen wir bei 33 von 38 Thesen eine komplette Übereinstimmung. Nur bei Fluggastdaten, Plastiksteuer, Russland, Tierversuchen und einer europäischen Armee unterscheiden sich die beiden Parteien (natürlich gibt es neben den 38 Themen des Wahl-O-Mats noch weitere Themen, bei denen Unterschiede bestehen könnten). Statt die Übereinstimmungen zu zählen, können wir aber einfach auf die als Verwandschaftsbaum eingeführte Striche über der heatmap schauen (der korrekte Begriff ist übrigens Dendrogram). Um zu schauen, wie weit weg die SPD von den Grünen ist, können wir die Verästelungen dazwischen zu zählen: in diesem Fall eine Einzige. Von allen Parteien sind die Grünen der SPD also am nächsten. Zum Vergleich, von der SPD zur Linken sind es schon zwei Verästelungen, bis zur FDP sogar vier. Nicht gerade überraschend, bilden SPD, Grüne und Linke einen großen Zweig im Partei-Verwandschaftsbaum (rot eingefärbt), CDU, FDP und AfD den zweiten großen Zweig (türkis). 
+
+
+## "Die beiden Volkspartein unterscheiden sich nicht" - oder doch?
+Die Klage, dass sich SPD und Union nicht mehr wirklich unterscheiden, hört man mittlerweile nicht mehr nur bei enttäuschten Sozialdemokraten. Aber sind die beiden Volksparteien in ihren Positionen wirklich so eng beieinander wie die inhaltsleeren Wahlkampf-Plakate vermuten lassen? 
+Ein Blick auf die Heatmap zeigt: 
+Nur in 16 Thesen stimmen die beiden Volksparteien (oder vielleicht besser ehemalige Volksparteien) in ihrer Position überein. Bei den meisten Thesen, 22 an der Zahl, unterscheiden sich ihre Meinungen. Aus dem Verwandschaftsbaum können wir ablesen, dass die FDP und die AfD der Union deutlich näher sind als die SPD. 
+
+
 
 ## Woran man eine Lobby-Partei erkennt
-bliblablubb
+Genug von den Bundestagsparteien, bei der Europawahl treten in Deutschland insgesamt 40 interessante und teilweise kuriose Parteien an. Die erste Anomalie in der folgenden Grafik lässt sich direkt erkennen: Die "Partei für Gesundheitsforschung" hat zu nichts eine Meinung außer zu Tierversuchen in der Medizin, die findet sie gut. 
 ```{r Alle.Parteien, echo=FALSE, warning=FALSE}
 d3heatmap(df, 
           colors = colors, 
@@ -101,6 +100,11 @@ d3heatmap(df,
 
 Wer sich schon einmal überlegt hat, die Tierschutzpartei oder die Partei "Volksabstimmung" zu wählen, hat womöglich nicht damit gerechnet, dass diese die größten Übereinstimmungen mit der NPD und der AfD haben. 
 
-## Merci
 
-Danke an Steffen für seinen Support beim scrapen der PDF! Leider stellt die Bundeszentrale für politische Bildung die Daten des Wahl-O-Mats auch auf Nachfrage nicht zur Verfügung (und versteckt die Position der Parteien in der PDF als Hintergrundgrafik), weshalb man sie aufwändig mit einem Zeichenerkennungsverfahren auslesen muss. Die Positionen der Parteien im Bundestag hab ich nochmal händisch überprüft, trotzdem kann ich leider keine Verantwortung für die Richtigkeit der Daten übernehmen. Wenn jemand die Daten weiter verwenden möchte (die BpB freut sich sicher), ihr findet sie auf github. Danke an Jan für die Unterstützung bei der Einbidung der Grafiken auf die Website!
+## Die ähnlichste Partei zur AfD ist die NPD
+
+26 Übereinstimmungen, mehr als mit jeder anderen Partei (dicht gefolgt von der III. Weg und DIE RECHTE mit je 25 Übereinstimmungen. 
+
+## Daten, Danke & und ein Wunsch
+Danke an Jan für die Unterstützung bei der Einbidung der Grafiken auf die Website, interaktive Grafiken sind geil, aber leider nicht immer trivial einzubinden. 
+Danke an Steffen für seinen Support beim scrapen der PDF, alleine hätte ich das nicht geschafft! Leider stellt die Bundeszentrale für politische Bildung (BpB) die Daten des Wahl-O-Mats auch auf Nachfrage nicht zur Verfügung (sondern versteckt die Position der Parteien in der PDF als Hintergrundgrafik), weshalb man sie aufwändig mit einem Zeichenerkennungsverfahren auslesen muss. Die Positionen der Parteien im Bundestag hab ich nochmal händisch überprüft, trotzdem kann ich leider keine Verantwortung für die Richtigkeit der Daten übernehmen. Wenn jemand die Daten weiter verwenden möchte, ihr findet sie auf github. Zuletzt: Falls jemand eine gute Fee kennt, ich würde der BpB bei der Gelegenheit gerne ein bisschen Idealismus und Mut beim Thema Open Data wünschen :)
