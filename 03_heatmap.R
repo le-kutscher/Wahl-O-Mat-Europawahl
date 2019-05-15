@@ -3,6 +3,8 @@ library(tidyverse)
 library(d3heatmap)
 library(gplots)
 library(htmlwidgets)
+library(jsonlite)
+library(reshape2)
 #heatmapper not available for R version 3.6
 
 Sys.getlocale()
@@ -32,8 +34,21 @@ df.text[df.text==3] <- 'Zustimmung zu "'
 df.text <- df.text %>% 
   map_dfc(~str_c(., Thesen, '"'))
 
+agreement_level <- c("Ablehnung zu '", "Neutral zu '", "Zustimmung zu '")
+
+df$question <- rownames(df)
+
+melt(df, id = "question") %>% 
+  mutate(label = paste0(agreement_level[value], Thesen, "'")) %>% 
+  write_csv("./data/wahl-o-mat-all.csv")
+
+melt(df[,c(1:6, 41)], id = "question") %>% 
+  mutate(label = paste0(agreement_level[value], Thesen, "'")) %>% 
+  write_csv("./data/wahl-o-mat-bt.csv")
+
 
 # 2. d3heatmapper ---------------------------------------------------------
+
 
 d3 <- d3heatmap(df, 
           colors = colors, 
