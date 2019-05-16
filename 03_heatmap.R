@@ -5,6 +5,7 @@ library(gplots)
 library(htmlwidgets)
 library(jsonlite)
 library(reshape2)
+library(r2d3)
 #heatmapper not available for R version 3.6
 
 Sys.getlocale()
@@ -34,17 +35,14 @@ df.text[df.text==3] <- 'Zustimmung zu "'
 df.text <- df.text %>% 
   map_dfc(~str_c(., Thesen, '"'))
 
-agreement_level <- c("Ablehnung zu '", "Neutral zu '", "Zustimmung zu '")
-
-df$question <- rownames(df)
-
-melt(df, id = "question") %>% 
-  mutate(label = paste0(agreement_level[value], Thesen, "'")) %>% 
-  write_csv("./data/wahl-o-mat-all.csv")
-
-melt(df[,c(1:6, 41)], id = "question") %>% 
-  mutate(label = paste0(agreement_level[value], Thesen, "'")) %>% 
-  write_csv("./data/wahl-o-mat-bt.csv")
+#agreement_level <- c("Ablehnung zu '", "Neutral zu '", "Zustimmung zu '")
+#df$question <- rownames(df)
+#melt(df, id = "question") %>% 
+#  mutate(label = paste0(agreement_level[value], Thesen, "'")) %>% 
+#  write_csv("./data/wahl-o-mat-all.csv")
+#melt(df[,c(1:6, 41)], id = "question") %>% 
+#  mutate(label = paste0(agreement_level[value], Thesen, "'")) %>% 
+#  write_csv("./data/wahl-o-mat-bt.csv")
 
 
 # 2. d3heatmapper ---------------------------------------------------------
@@ -61,6 +59,7 @@ d3 <- d3heatmap(df,
           cellnote = df.text,
           k_col = 4)
 saveWidget(d3, "d3heatmap-alle-Parteien.html")
+save_d3_html(d3, file = "d3heatmap-alle-Parteien-not-selfcontained.html", selfcontained = FALSE)
 
 #Bundestagsparteien
 df.BT <- subset(df, select = 1:6)
