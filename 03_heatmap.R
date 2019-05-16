@@ -89,7 +89,7 @@ similarity <- function(df){
   }
   print(diff[,c(ncol(df)+1, 1:ncol(df))])
 } #create function for creating matrix that shows how many common positions every party has with one another
-similarity <- similarity(df)
+similarity.df <- similarity(df)
 similarity(df.BT)
 
 # heatmaply ---------------------------------------------------------------
