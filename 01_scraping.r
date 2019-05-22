@@ -4,8 +4,12 @@ library(magick)
 library(tesseract)
 library(tidyverse)
 
-url <- "https://www.wahl-o-mat.de/europawahl2019/Positionsvergleich-Europawahl2019.pdf"
-download.file(url, "positions.pdf", mode = "wb")
+#set working directory temporarily to subfolder "pdf-scraping"
+wd <- getwd()
+setwd("./pdf-scraping/")
+
+#url <- "https://www.wahl-o-mat.de/europawahl2019/Positionsvergleich-Europawahl2019.pdf"
+#download.file(url, "positions.pdf", mode = "wb")
 tesseract_download("eng", getwd()) 
 
 "positions.pdf" %>% 
@@ -61,3 +65,5 @@ positions <- positions %>%
 
 write_rds(positions, "positions.rds")
 
+#reset working directory
+setwd(wd)

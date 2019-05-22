@@ -6,7 +6,6 @@ library(htmlwidgets)
 library(jsonlite)
 library(reshape2)
 library(r2d3)
-#heatmapper not available for R version 3.6
 
 Sys.getlocale()
 Sys.setlocale("LC_CTYPE", "german")
@@ -27,6 +26,7 @@ rownames(df) <- Label %>%
 
 colors <- c("#e21a00", "grey", "chartreuse3")
 
+#create a dataframe with the texts for the hover
 df.text <- df
 df.text[df.text==1] <- 'Ablehnung zu "'
 df.text[df.text==2] <- 'Neutral zu "'
@@ -46,7 +46,9 @@ df.text <- df.text %>%
 
 
 # 2. d3heatmapper ---------------------------------------------------------
-
+#temporarily change working directory to subfolder plots
+wd <- getwd()
+setwd("./plots/")
 
 d3 <- d3heatmap(df, 
           colors = colors, 
@@ -58,8 +60,7 @@ d3 <- d3heatmap(df,
           yaxis_width = 250,
           cellnote = df.text,
           k_col = 4)
-saveWidget(d3, "d3heatmap-alle-Parteien.html")
-save_d3_html(d3, file = "d3heatmap-alle-Parteien-not-selfcontained.html", selfcontained = FALSE)
+save_d3_html(d3, file = "d3heatmap-alle-Parteien.html")
 
 #Bundestagsparteien
 df.BT <- subset(df, select = 1:6)
@@ -76,9 +77,10 @@ d3.BT <- d3heatmap(df.BT,
                 yaxis_width = 250,
                 cellnote = df.text.BT,
                 k_col = 2)
-saveWidget(d3.BT, "d3heatmap-BT-Parteien.html")
+save_d3_html(d3.BT, file = "d3heatmap-BT-Parteien.html")
 
-similarity <- function(df){
+#count similarities between parties
+similarity <- function(df){ #create function for creating matrix that shows how many common positions every party has with one another
   diff <- matrix(nrow = ncol(df), ncol = ncol(df)) %>% as_tibble()
   names(diff) <- names(df)
   diff$party <- names(df)
@@ -88,12 +90,15 @@ similarity <- function(df){
     }
   }
   print(diff[,c(ncol(df)+1, 1:ncol(df))])
-} #create function for creating matrix that shows how many common positions every party has with one another
+} 
 similarity.df <- similarity(df)
-similarity(df.BT)
+similarity.df.BT <- similarity(df.BT)
+
+#reset working directory
+setwd(wd)
 
 # heatmaply ---------------------------------------------------------------
-
+# this is only to try out an alternative package, not used finally
 
 #v1: simple
 heatmaply(df,
@@ -108,7 +113,7 @@ heatmaply(df,
 #v2
 #cc <- rep("blue", 40)
 heatmaply(df,
-          file = "./plots/heatmap_alle-Parteien.html",
+          #file = "./plots/heatmap_alle-Parteien.html",
           colors = colors, 
           fontsize_col = 8,
           #cexRow = 0.8,
@@ -132,7 +137,7 @@ df.EP <- subset(df, select = 1:6)
 rownames(df.EP) <- rownames(df)
 
 heatmaply(df.EP,
-          file = "./plots/heatmap_BT-Parteien.html",
+          #file = "./plots/heatmap_BT-Parteien.html",
           colors = colors, 
           fontsize_col = 8,
           #cexRow = 0.8,

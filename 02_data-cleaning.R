@@ -1,3 +1,12 @@
+############
+#
+# This script was used in an older version and is now replaced by script "01_scraping.r"
+#
+############
+
+
+
+
 library(stringr)
 data.raw <- readRDS("data_pp.1-8.rds")
 
